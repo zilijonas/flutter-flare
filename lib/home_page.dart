@@ -10,6 +10,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool _touched = false;
   bool _enabled = false;
+  bool _isToggling = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +50,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       height: 300,
       child: CupertinoButton(
-        onPressed: () => setState(() {
-          _enabled = !_enabled;
-          _touched = true;
-        }),
+        onPressed: _toggleAnimation,
         child: FlareActor(
           'assets/smile_switch.flr',
           alignment: Alignment.center,
@@ -76,5 +74,21 @@ class _HomePageState extends State<HomePage> {
         shouldClip: false,
       ),
     );
+  }
+
+  void _toggleAnimation() async {
+    if (_isToggling) return;
+
+    setState(() {
+      _isToggling = true;
+      _enabled = !_enabled;
+      _touched = true;
+    });
+
+    await Future.delayed(const Duration(milliseconds: 650));
+
+    setState(() {
+      _isToggling = false;
+    });
   }
 }
